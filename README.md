@@ -3,11 +3,15 @@
 ## Overview
 - Currently on the brainstorming stage deciding on the vibe and direction to go
 
-## Concept
+## Concept 1
 - Going trough time scroll animation starting from stone paintings, sculptures, hyrogliphs, times new roman then swiss design, blueprints, modern vercell, macboook captures screen to end it off when its vercel 
 - Modern think vercel
 - Take components from Aceternity
-- 
+
+## Concept 2
+- Minimalist design with focus on typography and whitespace
+- Clean lines, simple color palette, elegant fonts
+- Take components from Aceternity
 
 ## Tech Stack 
 - Astro
