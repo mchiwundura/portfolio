@@ -9,55 +9,122 @@ import Layout from '../layouts/BlogPost.astro';
 	pubDate={new Date('August 08 2021')}
 	heroImage={AboutHeroImage}
 >
-	<p>
-		Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut
-		labore et dolore magna aliqua. Vitae ultricies leo integer malesuada nunc vel risus commodo
-		viverra. Adipiscing enim eu turpis egestas pretium. Euismod elementum nisi quis eleifend quam
-		adipiscing. In hac habitasse platea dictumst vestibulum. Sagittis purus sit amet volutpat. Netus
-		et malesuada fames ac turpis egestas. Eget magna fermentum iaculis eu non diam phasellus
-		vestibulum lorem. Varius sit amet mattis vulputate enim. Habitasse platea dictumst quisque
-		sagittis. Integer quis auctor elit sed vulputate mi. Dictumst quisque sagittis purus sit amet.
-	</p>
+  <div class="about-intro">
+    <h2>From Pharmacy to Code</h2>
+    <p>
+      I spent years studying how drugs work in the body. Now I'm learning how to build 
+      software that helps healthcare work better.
+    </p>
+  </div>
 
-	<p>
-		Morbi tristique senectus et netus. Id semper risus in hendrerit gravida rutrum quisque non
-		tellus. Habitasse platea dictumst quisque sagittis purus sit amet. Tellus molestie nunc non
-		blandit massa. Cursus vitae congue mauris rhoncus. Accumsan tortor posuere ac ut. Fringilla urna
-		porttitor rhoncus dolor. Elit ullamcorper dignissim cras tincidunt lobortis. In cursus turpis
-		massa tincidunt dui ut ornare lectus. Integer feugiat scelerisque varius morbi enim nunc.
-		Bibendum neque egestas congue quisque egestas diam. Cras ornare arcu dui vivamus arcu felis
-		bibendum. Dignissim suspendisse in est ante in nibh mauris. Sed tempus urna et pharetra pharetra
-		massa massa ultricies mi.
-	</p>
+  <!-- Optional: Add headshot here if you have one -->
+  <!-- <img src="/path-to-headshot.jpg" alt="Munyaradzi Chiwundura" class="headshot" /> -->
 
-	<p>
-		Mollis nunc sed id semper risus in. Convallis a cras semper auctor neque. Diam sit amet nisl
-		suscipit. Lacus viverra vitae congue eu consequat ac felis donec. Egestas integer eget aliquet
-		nibh praesent tristique magna sit amet. Eget magna fermentum iaculis eu non diam. In vitae
-		turpis massa sed elementum. Tristique et egestas quis ipsum suspendisse ultrices. Eget lorem
-		dolor sed viverra ipsum. Vel turpis nunc eget lorem dolor sed viverra. Posuere ac ut consequat
-		semper viverra nam. Laoreet suspendisse interdum consectetur libero id faucibus. Diam phasellus
-		vestibulum lorem sed risus ultricies tristique. Rhoncus dolor purus non enim praesent elementum
-		facilisis. Ultrices tincidunt arcu non sodales neque. Tempus egestas sed sed risus pretium quam
-		vulputate. Viverra suspendisse potenti nullam ac tortor vitae purus faucibus ornare. Fringilla
-		urna porttitor rhoncus dolor purus non. Amet dictum sit amet justo donec enim.
-	</p>
+  <div class="journey">
+    <h3>The Journey</h3>
+    
+    <div class="journey-step">
+      <!-- Optional: Icon or small illustration -->
+      <h4>Teaching & Discovery (2019-2024)</h4>
+      <p>
+        Spent 5 years tutoring pharmacy students and saw firsthand how technology could 
+        improve learning. Students struggled with disorganized materials and passive study 
+        methods. I started organizing my notes in markdown and building better systems.
+      </p>
+    </div>
 
-	<p>
-		Mattis ullamcorper velit sed ullamcorper morbi tincidunt. Tortor posuere ac ut consequat semper
-		viverra. Tellus mauris a diam maecenas sed enim ut sem viverra. Venenatis urna cursus eget nunc
-		scelerisque viverra mauris in. Arcu ac tortor dignissim convallis aenean et tortor at. Curabitur
-		gravida arcu ac tortor dignissim convallis aenean et tortor. Egestas tellus rutrum tellus
-		pellentesque eu. Fusce ut placerat orci nulla pellentesque dignissim enim sit amet. Ut enim
-		blandit volutpat maecenas volutpat blandit aliquam etiam. Id donec ultrices tincidunt arcu. Id
-		cursus metus aliquam eleifend mi.
-	</p>
+    <div class="journey-step">
+      <h4>Research & Realization (2023-2024)</h4>
+      <p>
+        Completed my MSc in Pharmacology with a computational focus. Worked with cells, 
+        ran statistical models, and discovered I loved the modeling more than the lab work. 
+        Applied to a pharmacometrics PhD program and didn't get in—but the application 
+        process taught me I wanted to build tools, not just publish papers.
+      </p>
+    </div>
 
-	<p>
-		Tempus quam pellentesque nec nam aliquam sem. Risus at ultrices mi tempus imperdiet. Id porta
-		nibh venenatis cras sed felis eget velit. Ipsum a arcu cursus vitae. Facilisis magna etiam
-		tempor orci eu lobortis elementum. Tincidunt dui ut ornare lectus sit. Quisque non tellus orci
-		ac. Blandit libero volutpat sed cras. Nec tincidunt praesent semper feugiat nibh sed pulvinar
-		proin gravida. Egestas integer eget aliquet nibh praesent tristique magna.
-	</p>
+    <div class="journey-step">
+      <h4>Transition & Focus (2024-Present)</h4>
+      <p>
+        Realized dispensing wasn't for me. Started learning to code seriously—React, Python, 
+        data structures. Had 12 unfinished projects at one point (we don't talk about that). 
+        Now focusing on actually shipping: building Fundeka for students, learning health 
+        data science, and proving that pharmacists can write code.
+      </p>
+    </div>
+  </div>
+
+  <!-- Optional: Add image showing your workspace, or a photo of you teaching/working -->
+  <!-- <img src="/path-to-workspace.jpg" alt="My workspace" class="workspace-photo" /> -->
+
+  <div class="why-this-matters">
+    <h3>Why This Combination Matters</h3>
+    <p>
+      Most developers don't understand clinical workflows. Most pharmacists don't code. 
+      I'm betting that sitting in the middle of that Venn diagram is valuable.
+    </p>
+    <p>
+      I know what vancomycin does to kidneys AND what recursion does to stack frames. 
+      I can explain enzyme kinetics and event loops. I understand both the problem space 
+      (healthcare) and increasingly, the solution space (software).
+    </p>
+  </div>
+
+  <div class="current-focus">
+    <h3>What I'm Working Toward</h3>
+    <p>
+      I'm aiming for a remote health data scientist role ($100k+ by 2027-2028), building 
+      products that solve real healthcare problems, and learning to finish what I start.
+    </p>
+    <p>
+      Currently doing my pharmacy internship in Zimbabwe while building my portfolio—proving 
+      I can execute, not just theorize.
+    </p>
+  </div>
+
+  <!-- Optional: Add a casual photo here, maybe from Zimbabwe or with friends/family -->
+  <!-- <img src="/path-to-casual-photo.jpg" alt="In Zimbabwe" class="casual-photo" /> -->
+
+  <div class="beyond-code">
+    <h3>Beyond the Code</h3>
+    <p>
+      When I'm not coding or dispensing medications, I'm making a wind spider game on Sundays 
+      (because why not?), working on my fitness, and staying connected with family and friends. 
+      I've learned the hard way that burning out doesn't make you productive—it just makes you 
+      miserable.
+    </p>
+    <p>
+      I'm also working on being okay with "good enough" instead of chasing "world-class" at 
+      everything. Turns out, shipping one thing beats starting twelve things. Who knew?
+    </p>
+  </div>
+
+  <div class="values">
+    <h3>What Guides Me</h3>
+    <p>
+      Faith matters to me—I try to praise God in the work I do and how I treat people. 
+      Health matters—I exercise regularly and sleep well because code written at 2am is 
+      usually garbage. People matter—I'm learning to be present for family and friends 
+      instead of always grinding.
+    </p>
+    <p>
+      And finishing what I start matters most right now. I have degrees, I have skills, 
+      I have ideas. What I'm building is the discipline to actually ship things people can use.
+    </p>
+  </div>
+
+  <!-- Optional: Timeline graphic showing the journey visually -->
+  <!-- Could be a simple SVG or image showing: Pharmacy degree → Teaching → MSc → Learning code → Current -->
+
+  <div class="call-to-action">
+    <h3>Let's Connect</h3>
+    <p>
+      I'm open to conversations with other pharmacists learning to code, health tech folks 
+      who need someone who understands both clinical and technical sides, and anyone who 
+      wants to talk about educational technology or health data science.
+    </p>
+    <p>
+      Based in Zimbabwe, looking for remote opportunities starting 2026.
+    </p>
+  </div>
 </Layout>
