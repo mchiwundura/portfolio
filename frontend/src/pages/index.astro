@@ -13,36 +13,197 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 	<body>
 		<Header />
 		<main>
-			<h1>🧑‍🚀 Hello, Astronaut!</h1>
-			<p>
-				Welcome to the official <a href="https://astro.build/">Astro</a> blog starter template. This
-				template serves as a lightweight, minimally-styled starting point for anyone looking to build
-				a personal website, blog, or portfolio with Astro.
-			</p>
-			<p>
-				This template comes with a few integrations already configured in your
-				<code>astro.config.mjs</code> file. You can customize your setup with
-				<a href="https://astro.build/integrations">Astro Integrations</a> to add tools like Tailwind,
-				React, or Vue to your project.
-			</p>
-			<p>Here are a few ideas on how to get started with the template:</p>
-			<ul>
-				<li>Edit this page in <code>src/pages/index.astro</code></li>
-				<li>Edit the site header items in <code>src/components/Header.astro</code></li>
-				<li>Add your name to the footer in <code>src/components/Footer.astro</code></li>
-				<li>Check out the included blog posts in <code>src/content/blog/</code></li>
-				<li>Customize the blog post page layout in <code>src/layouts/BlogPost.astro</code></li>
-			</ul>
-			<p>
-				Have fun! If you get stuck, remember to
-				<a href="https://docs.astro.build/">read the docs</a>
-				or <a href="https://astro.build/chat">join us on Discord</a> to ask questions.
-			</p>
-			<p>
-				Looking for a blog template with a bit more personality? Check out
-				<a href="https://github.com/Charca/astro-blog-template">astro-blog-template</a>
-				by <a href="https://twitter.com/Charca">Maxi Ferreira</a>.
-			</p>
+
+				<section class="hero">
+  <h1>Munyaradzi Chiwundura</h1>
+  <p class="tagline">
+    Pharmacist learning to build software for healthcare and education.
+  </p>
+  <p class="sub-tagline">
+    Combining pharmacy expertise with data science and software development.
+  </p>
+  
+  <div class="cta-buttons">
+    <a href="#projects" class="button-primary">See My Work</a>
+    <a href="/about" class="button-secondary">Read My Story</a>
+  </div>
+  
+  <div class="social-links">
+    <a href="github-url">GitHub</a>
+    <a href="linkedin-url">LinkedIn</a>
+    <a href="mailto:email">Email</a>
+  </div>
+				</section>
+
+<section class="current-work">
+  <h2>What I'm Building</h2>
+  <div class="featured-project">
+    <!-- This is THE main thing right now -->
+    <div class="project-visual">
+      <img src="fundeka-screenshot.png" alt="Fundeka app interface" />
+      <!-- Or a mockup/prototype screenshot -->
+    </div>
+    <div class="project-details">
+      <h3>Fundeka</h3>
+      <p class="project-tagline">
+        Educational platform for pharmacy students with structured notes and spaced repetition.
+      </p>
+      <p class="project-status">
+        <span class="status-badge in-progress">Launching January 2025</span>
+      </p>
+      <p class="project-description">
+        After 5 years of tutoring, I'm building the study tool I wish existed. 
+        Structured content, active recall, and long-term retention—designed for 
+        how students actually learn, not just how they cram.
+      </p>
+      <div class="project-tech">
+        <span class="tech-tag">React Native</span>
+        <span class="tech-tag">Expo</span>
+        <span class="tech-tag">SQLite</span>
+      </div>
+      <a href="project-page-or-github" class="project-link">Learn more →</a>
+    </div>
+  </div>
+</section>
+
+<section class="projects" id="projects">
+  <h2>Other Work</h2>
+  <div class="projects-grid">
+    <div class="project-card">
+      <div class="project-image">
+        <!-- Screenshot or placeholder -->
+        <img src="drug-interaction-placeholder.png" alt="Drug Interaction Predictor" />
+      </div>
+      <h3>Drug Interaction Predictor</h3>
+      <p>ML model to predict dangerous drug combinations using pharmaceutical databases.</p>
+      <div class="project-meta">
+        <span class="status-badge planning">Planning Q1 2025</span>
+        <div class="tech-tags">
+          <span>Python</span>
+          <span>scikit-learn</span>
+        </div>
+      </div>
+      <a href="github-or-blog-post" class="card-link">View on GitHub →</a>
+    </div>
+    
+    <div class="project-card">
+      <div class="project-image">
+        <img src="solifuge-screenshot.png" alt="Solifuge game" />
+      </div>
+      <h3>Mwene</h3>
+      <p>History inspired 3d game about Great Zimbabwe</p>
+      <div class="project-meta">
+        <span class="status-badge prototype">Prototype</span>
+        <div class="tech-tags">
+          <span>Godot</span>
+          <span>GDScript</span>
+        </div>
+      </div>
+      <a href="github-link" class="card-link">View on GitHub →</a>
+    </div>
+    
+    <!-- You can add one more card here for the portfolio itself, or leave space for next project -->
+    
+  </div>
+  
+  <p class="projects-note">
+    More projects coming as I build my health data science portfolio. 
+    <a href="/about">Read about my journey →</a>
+  </p>
+</section>
+
+<section class="skills">
+  <h2>Technical Skills</h2>
+  
+  <div class="skills-grid">
+    <div class="skill-category">
+      <h3>Currently Building With</h3>
+      <ul>
+        <li>React & React Native</li>
+        <li>Python (pandas, scikit-learn)</li>
+        <li>JavaScript/TypeScript</li>
+        <li>SQL</li>
+      </ul>
+    </div>
+    
+    <div class="skill-category">
+      <h3>Learning</h3>
+      <ul>
+        <li>Health data science</li>
+        <li>Machine learning for clinical applications</li>
+        <li>Rust (for healthcare tools)</li>
+        <li>Data structures & algorithms</li>
+      </ul>
+    </div>
+    
+    <div class="skill-category">
+      <h3>Domain Expertise</h3>
+      <ul>
+        <li>Pharmacy (BPharm, MSc Pharmacology)</li>
+        <li>Clinical workflows</li>
+        <li>Drug mechanisms & interactions</li>
+        <li>Healthcare data</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<section class="writing">
+  <h2>Recent Writing</h2>
+  
+  <div class="blog-preview">
+    <article class="blog-card">
+      <span class="post-date">January 2025</span>
+      <h3><a href="/blog/why-im-building-fundeka">Why I'm Building Fundeka</a></h3>
+      <p>
+        After 5 years of tutoring pharmacy students, I saw the same problems 
+        repeated: disorganized notes, passive studying, and last-minute cramming...
+      </p>
+      <a href="/blog/why-im-building-fundeka" class="read-more">Read more →</a>
+    </article>
+    
+    <article class="blog-card">
+      <span class="post-date">February 2025</span>
+      <h3><a href="/blog/from-12-to-3">From 12 Projects to 3: Learning to Focus</a></h3>
+      <p>
+        I used to have 12 unfinished projects. Now I have 3 I'm actually shipping. 
+        Here's what changed...
+      </p>
+      <a href="/blog/from-12-to-3" class="read-more">Read more →</a>
+    </article>
+  </div>
+	<label for="mailing_list">Join my Mailing List</label>
+		<input type="" name="mailing_list" value="" placeholder="email">
+  <a href="/blog" class="view-all-posts">View all posts →</a>
+</section>
+
+<section class="contact">
+  <h2>Let's Connect</h2>
+  <p>
+    I'm looking for remote health tech / data science opportunities starting 2026.
+    Open to conversations about pharmacy + tech, educational technology, or health data science.
+  </p>
+  
+  <div class="contact-methods">
+    <a href="mailto:your-email" class="contact-button">
+      <span class="icon">📧</span>
+      <span>Email me</span>
+    </a>
+    <a href="linkedin-url" class="contact-button">
+      <span class="icon">💼</span>
+      <span>LinkedIn</span>
+    </a>
+    <a href="github-url" class="contact-button">
+      <span class="icon">🐙</span>
+      <span>GitHub</span>
+    </a>
+  </div>
+  
+  <p class="location">
+    📍 Based in Zimbabwe · Available for remote work
+  </p>
+</section>
+
 		</main>
 		<Footer />
 	</body>
