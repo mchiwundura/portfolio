@@ -5,11 +5,11 @@ description: string
 cover: string
 }
 
-const {title, description, cover} = Astro.props;
+const {title, description, Cover} = Astro.props;
 ---
 
 <div>
-	<a>{cover}</a>
+	<Cover/>
 	<h3>{title}</h3>
 	<p>{description}</p>
 	<a>Read more</a>
