@@ -127,6 +127,36 @@ hr {
 	border: none;
 	border-top: 1px solid rgb(var(--gray-light));
 }
+
+.hero-right {
+	width: 50%;
+}
+
+.hero-left {
+	width: 50%;
+}
+.hero {
+	display: flex;
+	flex-direction: row;
+}
+
+.current-work {
+	display: flex;
+	flex-direction: row;
+} 
+.profile-container {
+	position: relative;
+
+}
+.profile-container img {
+position: absolute;
+}
+
+.data-projects-container {
+	display: flex;
+	flex-direction: row;
+}
+
 @media (max-width: 720px) {
 	body {
 		font-size: 18px;

@@ -1,5 +1,10 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import ProfileSterile from '../assets/profile_sterile.png';
+import ProfileLabcoat from '../assets/profile_labcoat.png';
+import ProfileWireframe from '../assets/profile_wireframe.png';
+import FundekaMockup from '../assets/fundeka_mock.png';
+import { Image } from 'astro:assets';
 import ZimbabweADR from '../assets/zimbabwe_adr.svg';
 import PharmacokineticPAR from '../assets/pharmacokinetic_par.svg'; 
 import Footer from '../components/Footer.astro';
@@ -18,6 +23,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 		<main>
 
 				<section class="hero">
+					<div class="hero-left">
   <h1>Munyaradzi Chiwundura</h1>
   <p class="tagline">
     Pharmacist learning to build software for healthcare and education.
@@ -36,9 +42,22 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
     <a href="linkedin-url">LinkedIn</a>
     <a href="mailto:email">Email</a>
   </div>
+					</div>
+
+					<div class="hero-right">
+						<div class="profile-container">
+							<Image alt="Munyaradzi Chiwundura in a Labcoat" src={ProfileLabcoat}/>
+							<Image alt="Munyaradzi Chiwundura in a sterile coat" src={ProfileSterile}/>
+							<Image alt="Wireframe of a sterile mask and goggles" src={ProfileWireframe}/>
+	</div>
+	</div>
 				</section>
 
 <section class="current-work">
+	<div class="current-work-left">
+		<Image alt="Mockup of Fundeka" src={FundekaMockup}/>
+	</div>
+	<div class="current-work-right"> 
   <h2>What I'm Building</h2>
   <div class="featured-project">
     <!-- This is THE main thing right now -->
@@ -67,9 +86,11 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
       <a href="project-page-or-github" class="project-link">Learn more →</a>
     </div>
   </div>
+  </div>
 </section>
 
 <section>
+	<div class="data-projects-container">
 	<ProjectCard  title="Zimbabwe ADR Surveilence System" 
 								description="The Zimbabwe Adverse Drug Reaction (ADR) Surveillance System aims to streamline the detection and reporting of medication side effects in Zimbabwe. This system will enable healthcare professionals and patients to report adverse reactions, allowing for swift identification and analysis of trends. By leveraging technology, this initiative seeks to improve patient safety, reduce healthcare costs, and enhance overall public health in Zimbabwe."
 								Cover={ZimbabweADR}
@@ -86,6 +107,7 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 								description="This project applies reinforcement learning techniques to optimize medication dosing regimens for individual patients. The system uses real-world data and machine learning algorithms to learn from trial-and-error experiences, identifying the most effective dosages based on patient-specific factors such as age, weight, and medical history. By automating dose optimization, this initiative aims to improve treatment outcomes, reduce side effects, and enhance the overall quality of life for patients receiving medication therapy." 
 								Cover={ZimbabweADR}
 								/>
+	</div>
 </section>
 
 <section class="projects" id="projects">
