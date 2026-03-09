@@ -1,0 +1,297 @@
+---
+import ProfileSterile from '../assets/profile_sterile.png';
+import ProfileLabcoat from '../assets/profile_labcoat.png';
+
+const sterileUrl = ProfileSterile.src;
+const labcoatUrl = ProfileLabcoat.src;
+---
+
+<div
+  class="profile-canvas-wrapper"
+  id="profile-canvas-wrapper"
+  data-sterile={sterileUrl}
+  data-labcoat={labcoatUrl}
+>
+  <canvas id="profile-reveal-canvas"></canvas>
+
+  <!-- Custom SVG cursor: circle with dot -->
+  <svg id="blob-cursor" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+    <circle cx="20" cy="20" r="18" fill="none" stroke="white" stroke-width="1.5" opacity="0.9"/>
+    <circle cx="20" cy="20" r="3"  fill="white" opacity="0.9"/>
+  </svg>
+</div>
+
+<script>
+  import * as THREE from 'three';
+
+  const wrapper = document.getElementById('profile-canvas-wrapper') as HTMLElement;
+  const canvas  = document.getElementById('profile-reveal-canvas') as HTMLCanvasElement;
+  const cursor  = document.getElementById('blob-cursor') as unknown as SVGElement;
+
+  const sterileUrl = wrapper.dataset.sterile!;
+  const labcoatUrl = wrapper.dataset.labcoat!;
+
+  // ── Renderer ──────────────────────────────────────────────────────────────
+  const renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+  renderer.setPixelRatio(window.devicePixelRatio);
+
+  const scene  = new THREE.Scene();
+  const camera = new THREE.OrthographicCamera(-0.5, 0.5, 0.5, -0.5, 0, 10);
+  camera.position.z = 1;
+
+  // ── Texture loader ─────────────────────────────────────────────────────────
+  const loader = new THREE.TextureLoader();
+  const loadTex = (url: string) =>
+    new Promise<THREE.Texture>(res =>
+      loader.load(url, t => {
+        t.minFilter = THREE.LinearFilter;
+        t.magFilter = THREE.LinearFilter;
+        t.generateMipmaps = false;
+        res(t);
+      })
+    );
+
+  // ── Metaball / blob state ─────────────────────────────────────────────────
+  // We use a small number of "blobs" — one primary that chases the mouse
+  // and several satellite orbs that orbit / trail it, all fed to the shader
+  // as vec3 array (x, y, radius) in UV space.
+
+  const NUM_BLOBS = 6;
+
+  // Physics state per blob
+  interface Blob {
+    x: number; y: number;        // current position (UV)
+    vx: number; vy: number;      // velocity
+    r: number;                   // radius (UV units)
+    targetX: number; targetY: number;
+    phase: number;               // oscillation phase offset
+    orbitR: number;              // orbit radius around primary
+    orbitSpeed: number;
+  }
+
+  const blobs: Blob[] = [];
+
+  // Primary blob (index 0) — chases mouse with spring + damping
+  blobs.push({ x: 0.5, y: 0.5, vx: 0, vy: 0, r: 0.14, targetX: 0.5, targetY: 0.5, phase: 0, orbitR: 0, orbitSpeed: 0 });
+
+  // Satellite blobs — orbit the primary and add to the metaball field
+  for (let i = 1; i < NUM_BLOBS; i++) {
+    blobs.push({
+      x: 0.5, y: 0.5, vx: 0, vy: 0,
+      r: 0.06 + Math.random() * 0.05,
+      targetX: 0.5, targetY: 0.5,
+      phase: (i / NUM_BLOBS) * Math.PI * 2,
+      orbitR: 0.04 + Math.random() * 0.06,
+      orbitSpeed: (0.8 + Math.random() * 0.8) * (Math.random() > 0.5 ? 1 : -1),
+    });
+  }
+
+  // Mouse UV position
+  let mouseUV = { x: -2, y: -2 };   // off-screen initially
+  let isOver   = false;
+
+  // ── Shader ─────────────────────────────────────────────────────────────────
+  const vert = /* glsl */`
+    varying vec2 vUv;
+    void main() {
+      vUv = uv;
+      gl_Position = projectionMatrix * modelViewMatrix * vec4(position,1.0);
+    }
+  `;
+
+  const frag = /* glsl */`
+    varying vec2 vUv;
+
+    uniform sampler2D uTop;
+    uniform sampler2D uBottom;
+
+    uniform vec3  uBlobs[${NUM_BLOBS}];   // x, y, radius (all in UV space)
+    uniform float uAspect;                // canvas w/h to keep circles round
+    uniform float uRevealStrength;        // 0→1 global fade in/out
+
+    // Smooth metaball field
+    float blobField(vec2 uv) {
+      float field = 0.0;
+      for (int i = 0; i < ${NUM_BLOBS}; i++) {
+        vec2  d = uv - uBlobs[i].xy;
+        d.x    *= uAspect;               // correct for aspect ratio
+        float r = uBlobs[i].z;
+        field  += (r * r) / dot(d, d);
+      }
+      return field;
+    }
+
+    void main() {
+      float field   = blobField(vUv);
+
+      // Threshold at 1.0 — inside blob = reveal, outside = top layer
+      // smoothstep gives a soft liquid edge
+      float reveal  = smoothstep(0.85, 1.15, field) * uRevealStrength;
+
+      vec4 top    = texture2D(uTop,    vUv);
+      vec4 bottom = texture2D(uBottom, vUv);
+
+      gl_FragColor  = mix(top, bottom, reveal);
+    }
+  `;
+
+  // ── Main ────────────────────────────────────────────────────────────────────
+  async function init() {
+    const [sterile, labcoat] = await Promise.all([
+      loadTex(sterileUrl),
+      loadTex(labcoatUrl),
+    ]);
+
+    const img    = labcoat.image as HTMLImageElement;
+    const aspect = img.naturalWidth / img.naturalHeight;
+
+    function resize() {
+      const h = wrapper.clientHeight || 600;
+      const w = h * aspect;
+      renderer.setSize(w, h, false);
+      canvas.style.width  = w + 'px';
+      canvas.style.height = h + 'px';
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    // Initial blob uniforms
+    const blobData = new Array(NUM_BLOBS).fill(null).map(() => new THREE.Vector3(-2, -2, 0.1));
+
+    const material = new THREE.ShaderMaterial({
+      uniforms: {
+        uTop:           { value: labcoat },
+        uBottom:        { value: sterile },
+        uBlobs:         { value: blobData },
+        uAspect:        { value: aspect },
+        uRevealStrength:{ value: 0 },
+      },
+      vertexShader: vert,
+      fragmentShader: frag,
+      transparent: true,
+    });
+
+    scene.add(new THREE.Mesh(new THREE.PlaneGeometry(1, 1), material));
+
+    // ── Mouse tracking ───────────────────────────────────────────────────
+    function toUV(e: MouseEvent) {
+      const rect = canvas.getBoundingClientRect();
+      return {
+        x: (e.clientX - rect.left)  / rect.width,
+        y: (e.clientY - rect.top)   / rect.height,
+      };
+    }
+
+    window.addEventListener('mousemove', (e: MouseEvent) => {
+      const uv = toUV(e);
+      mouseUV  = uv;
+      // Update cursor SVG position
+      const rect = canvas.getBoundingClientRect();
+      const cx   = e.clientX - rect.left;
+      const cy   = e.clientY - rect.top;
+      (cursor as any).style.left = (cx - 20) + 'px';
+      (cursor as any).style.top  = (cy - 20) + 'px';
+    });
+
+    canvas.addEventListener('mouseenter', () => { isOver = true;  });
+    canvas.addEventListener('mouseleave', () => { isOver = false; mouseUV = { x: -2, y: -2 }; });
+
+    // Click → swap layers
+    let isFlipped = false;
+    canvas.addEventListener('click', () => {
+      isFlipped = !isFlipped;
+      material.uniforms.uTop.value    = isFlipped ? sterile : labcoat;
+      material.uniforms.uBottom.value = isFlipped ? labcoat : sterile;
+    });
+
+    // ── Animation loop ───────────────────────────────────────────────────
+    const SPRING  = 0.08;    // primary blob spring stiffness
+    const DAMPING = 0.72;    // velocity damping
+    const SAT_SPRING  = 0.06;
+    const SAT_DAMPING = 0.78;
+
+    let t = 0;
+    let revealTarget = 0;
+
+    function animate() {
+      requestAnimationFrame(animate);
+      t += 0.016;
+
+      revealTarget = isOver ? 1 : 0;
+      const cur = material.uniforms.uRevealStrength.value as number;
+      material.uniforms.uRevealStrength.value = cur + (revealTarget - cur) * 0.08;
+
+      // ── Primary blob spring physics ──────────────────────────────────
+      const pb = blobs[0];
+      pb.targetX = mouseUV.x;
+      pb.targetY = mouseUV.y;
+
+      const ax = (pb.targetX - pb.x) * SPRING;
+      const ay = (pb.targetY - pb.y) * SPRING;
+      pb.vx = (pb.vx + ax) * DAMPING;
+      pb.vy = (pb.vy + ay) * DAMPING;
+      pb.x += pb.vx;
+      pb.y += pb.vy;
+
+      // ── Satellite blobs orbit + spring ───────────────────────────────
+      for (let i = 1; i < NUM_BLOBS; i++) {
+        const sb = blobs[i];
+        // Target: orbit around primary blob
+        const angle  = sb.phase + t * sb.orbitSpeed;
+        const tx     = pb.x + Math.cos(angle) * sb.orbitR;
+        const ty     = pb.y + Math.sin(angle) * sb.orbitR * aspect;
+
+        const sax = (tx - sb.x) * SAT_SPRING;
+        const say = (ty - sb.y) * SAT_SPRING;
+        sb.vx = (sb.vx + sax) * SAT_DAMPING;
+        sb.vy = (sb.vy + say) * SAT_DAMPING;
+        sb.x += sb.vx;
+        sb.y += sb.vy;
+      }
+
+      // Upload blob positions to shader
+      for (let i = 0; i < NUM_BLOBS; i++) {
+        blobData[i].set(blobs[i].x, 1.0 - blobs[i].y, blobs[i].r);
+      }
+      material.uniforms.uBlobs.value = blobData;
+
+      // Scale cursor SVG with primary blob velocity (squish effect)
+      const speed  = Math.sqrt(pb.vx * pb.vx + pb.vy * pb.vy);
+      const scale  = 1 + speed * 8;
+      const angle  = Math.atan2(pb.vy, pb.vx) * (180 / Math.PI);
+      (cursor as any).style.transform = `rotate(${angle}deg) scaleX(${scale}) scaleY(${1 / Math.sqrt(scale)})`;
+
+      renderer.render(scene, camera);
+    }
+
+    animate();
+  }
+
+  init();
+</script>
+
+<style>
+  .profile-canvas-wrapper {
+    position: relative;
+    display: inline-block;
+    height: 100%;
+  }
+
+  #profile-reveal-canvas {
+    display: block;
+    cursor: none;
+  }
+
+  #blob-cursor {
+    position: absolute;
+    width: 40px;
+    height: 40px;
+    pointer-events: none;
+    transform-origin: center center;
+    top: -100px;
+    left: -100px;
+    mix-blend-mode: difference;
+    transition: opacity 0.2s;
+    z-index: 10;
+  }
+</style>
