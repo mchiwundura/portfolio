@@ -7,10 +7,11 @@ body {
 }
 
 main {
-  width: 100% !important;
-  max-width: none !important;
-  margin: 0 !important;
-  padding: 0 !important;
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  background: #000;	
+	
 }
 
 /* Hero */
@@ -18,9 +19,9 @@ main {
 }
 .hero-section {
 	position: sticky;
+	z-index: 2;
 	top: 0;
   width: 100%;
-  max-width: 1280px;
   background: #FFFFFF;
   overflow: hidden;
   margin: 0 auto;
@@ -136,9 +137,7 @@ main {
 /* Transition Section */
 .transition-section {
   position: relative;
-	z-index: -1;
   width: 100%;
-  max-width: 1280px;
   background: #000000;
   overflow: hidden;
   margin: 0 auto;
