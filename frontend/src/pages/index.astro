@@ -12,8 +12,8 @@ import '../styles/design.css';
 <script>
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
-
-gsap.registerPlugin(ScrollTrigger);
+import { SplitText } from "gsap/SplitText";
+gsap.registerPlugin(ScrollTrigger, SplitText);
 const hero = document.getElementById("hero");
 
 gsap.to(hero, {
@@ -26,6 +26,26 @@ gsap.to(hero, {
     scrub: 0.8
   }
 });
+
+  // Split the text
+  let split = SplitText.create(".about-content", {type:"words,lines"});
+
+  // Animate each line (we can use each sentence as a line)
+  gsap.from(split.lines, {
+    y: 50,
+    opacity: 0,
+    duration: 0.8,
+    ease: "power3.out",
+    stagger: 0.3,
+    scrollTrigger: {
+      trigger: "#about",
+      start: "top 80%",
+      toggleActions: "play none none none"
+    }
+  });
+
+  // Optional: refresh on resize
+  window.addEventListener("resize", () => split.revert());
 </script>
 
 <!doctype html>
