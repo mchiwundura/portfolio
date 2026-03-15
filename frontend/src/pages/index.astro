@@ -10,17 +10,22 @@ import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import '../styles/design.css';
 ---
 <script>
-	const hero = document.getElementById("hero");
-	window.addEventListener("scroll", () => {
-		const scrollY = window.scrollY;
-		const maxScroll = window.innerHeight * 0.5;
-		const progress = Math.min(scrollY / maxScroll, 1);
-		const scale = 1 - progress * 0.6;
-		const translateY = progress * -100;
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 
-		hero.style.transform = 
-			`scale(${scale}) translateY(${translateY}px)`;
-	});
+gsap.registerPlugin(ScrollTrigger);
+const hero = document.getElementById("hero");
+
+gsap.to(hero, {
+  scale: 0.4,          // 1 - 0.6
+  ease: "none",
+  scrollTrigger: {
+    trigger: hero,
+    start: "top top",
+    end: "50% top",    // same as window.innerHeight * 0.5
+    scrub: 0.8
+  }
+});
 </script>
 
 <!doctype html>
