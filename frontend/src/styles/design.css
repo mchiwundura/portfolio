@@ -261,22 +261,104 @@ main {
   color: rgba(30,30,30,0.8);
 }
 
-/* Skills Section */
 .skills-section {
   width: 100%;
-  max-width: 1280px;
-  background: #E5E5E5;
-  margin: 0 auto;
   padding: 100px 50px;
-  position: relative;
+  background: #E5E5E5;
+}
+
+.section-title {
+  font-size: 80px;
+  font-weight: 600;
+  margin-bottom: 40px;
 }
 
 .skills-container {
-  background: #000000;
+  border-radius: 24px;
+}
+
+/* CATEGORY */
+.skill-category {
+  border-top: 1px solid rgba(0,0,0,0.2);
+  padding: 30px 0;
+	width: 90%;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+/* HEADER */
+.skill-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.skill-header h3 {
+  font-size: 64px;
+  font-weight: 400;
+  margin: 0;
+  color: transparent;
+  -webkit-text-stroke: 1px black;
+  transition: all 0.3s ease;
+}
+
+/* ICON */
+.icon {
+  width: 64px;
+  height: 64px;
+  border: 2px solid black;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: all 0.3s ease;
+}
+
+/* CONTENT */
+.skill-content {
+  overflow: hidden;
+  height: 0;
+}
+
+.skill-content-inner {
+  padding-top: 20px;
+}
+
+.skill-content p {
+  font-size: 24px;
+  margin: 20px 0;
+}
+
+/* TAGS */
+.tags {
+  display: flex;
+  gap: 20px;
+  flex-wrap: wrap;
+}
+
+.tag {
+  background: #B1B2B5;
+  padding: 10px 20px;
+  border-radius: 6px;
+  color: black;
+}
+
+/* ACTIVE STATE */
+.skill-category.active {
+  background: black;
+  color: white;
   border-radius: 24px;
   padding: 40px;
-  color: #FFFFFF;
-  margin-top: 50px;
+}
+
+.skill-category.active .skill-header h3 {
+  color: white;
+  -webkit-text-stroke: 0;
+}
+
+.skill-category.active .icon {
+  border-color: white;
+  color: white;
 }
 
 /* Fundeka Section */
