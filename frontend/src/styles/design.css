@@ -277,6 +277,18 @@ main {
 	height: 100vh;
 }
 
+.data-project-text {
+	height: 100%;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+}
+
+.data-project-text h3 {
+	font-size: 36px;
+	font-weight: 500;
+}
+
 .section-bg-text {
   position: absolute;
   font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;

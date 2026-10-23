@@ -127,6 +127,11 @@ hr {
 	border-top: 1px solid rgb(var(--gray-light));
 }
 
+.hero-buttons {
+	display: flex;
+	flex-direction: row;
+	gap: 1em;
+}
 .hero-right {
 	width: 50%;
 }
