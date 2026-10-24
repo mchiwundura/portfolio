@@ -1,5 +1,6 @@
 ---
 import BaseHead from '../components/BaseHead.astro';
+import { getCollection } from 'astro:content';
 import FundekaMockup from '../assets/fundeka_mock.png';
 import ProfileReveal from '../components/Profilereveal.astro';
 import { Image } from 'astro:assets';
@@ -8,6 +9,8 @@ import PharmacokineticPAR from '../assets/pharmacokinetic_par.svg';
 import Header from '../components/Header.astro'
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import '../styles/design.css';
+
+const projects = (await getCollection('projects'));
 ---
 <script>
 import gsap from "gsap";
@@ -131,7 +134,7 @@ document.addEventListener("DOMContentLoaded", () => {
 					</div>
 						
 					<div class="hero-buttons">
-						<a href="#projects" class="hero-projects-btn">Explore my work</a>	
+						<a href="/projects" class="hero-projects-btn">Explore my work</a>	
 					  <a href="/resume.pdf" class="hero-resume-btn">Download CV</a>
 					</div>
 					<div class="hero-profile-images">
@@ -261,38 +264,16 @@ Science provides the questions. Data helps reveal the answers. Software makes th
 					
 					<section class="data-projects-stack">
 					<h2 class="section-title">Data Projects</h2>
-						<div style="top: 100px;" class="data-card">
+					{ projects.map((project, index) => (
+					<div style={`top: ${100 + index * 40}px`} class="data-card">
 							<div class="data-project-text">
-							<h3>Zimbabwe ADR Surveillance System</h3>
-							<p>An advanced Adverse Drug reaction Surveillance system to predict and react to ADRS in Zimbabwe before they happen.</p>
-							<a href="#">Read more</a>
+								<h3>{project.data.title}</h3>
+								<p>{project.data.description}</p>
+								<a href={`/projects/${project.id}/`}>Read more</a>
 							</div>
 							<ZimbabweADR  />
 						</div>
-						<div style="top: 140px;" class="data-card">
-							<div>
-							<h3>Pharmacokinetic Parameter Estimator</h3>
-							<p>A tool designed to predict key pharmacokinetic and pharmacodynamic parameters from sparse or noisy data.</p>
-							<a href="#">Read more</a>
-						</div>
-							<ZimbabweADR  />
-						</div>
-						<div style="top: 180px;" class="data-card">
-							<div>
-							<h3>Zimbabwe Medicine Price Analyzer</h3>
-							<p>An online platform that provides accurate and up-to-date pricing information for medicines in Zimbabwe.</p>
-							<a href="#">Read more</a>
-						</div>
-							<ZimbabweADR  />
-						</div>
-						<div style="top: 220px;" class="data-card">
-							<div>
-							<h3>Dose Optimization Via Reinforcement Learning</h3>
-							<p>Applying reinforcement learning techniques to optimize medication dosing regimens for individual patients.</p>
-							<a href="#">Read more</a>
-						</div>
-							<ZimbabweADR  />
-						</div>
+						))}
 					</section>
 
 				<section class="writing-section section">

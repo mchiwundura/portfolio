@@ -1,0 +1,134 @@
+---
+import { getCollection } from 'astro:content';
+import BaseHead from '../../components/BaseHead.astro';
+import Footer from '../../components/Footer.astro';
+import Header from '../../components/Header.astro';
+import { SITE_DESCRIPTION, SITE_TITLE } from '../../consts';
+
+const projects = await getCollection('projects');
+---
+
+<!doctype html>
+<html lang="en">
+	<head>
+		<BaseHead title={`Projects | ${SITE_TITLE}`} description={SITE_DESCRIPTION} />
+		<style>
+			main {
+				width: 960px;
+			}
+			.page-header {
+				margin-bottom: 3rem;
+			}
+			.page-header h1 {
+				margin: 0 0 0.25em;
+			}
+			.page-header p {
+				max-width: 620px;
+				margin: 0;
+				color: rgb(var(--gray));
+			}
+			ul {
+				display: grid;
+				grid-template-columns: repeat(2, minmax(0, 1fr));
+				gap: 2.5rem 2rem;
+				list-style-type: none;
+				margin: 0;
+				padding: 0;
+			}
+			ul li {
+				display: flex;
+			}
+			ul li a {
+				display: flex;
+				flex-direction: column;
+				width: 100%;
+				text-decoration: none;
+			}
+			.vector {
+				display: flex;
+				align-items: center;
+				justify-content: center;
+				margin-bottom: 1rem;
+				padding: 1.5rem;
+				background: rgba(var(--gray-light), 0.35);
+				border-radius: 12px;
+				transition: 0.2s ease;
+			}
+			.vector img {
+				width: 160px;
+				height: 160px;
+				object-fit: contain;
+			}
+			.title {
+				margin: 0;
+				color: rgb(var(--black));
+				font-size: 1.563rem;
+				line-height: 1.15;
+				transition: 0.2s ease;
+			}
+			.description {
+				margin: 0.5rem 0 1rem;
+				color: rgb(var(--gray));
+				font-size: 1rem;
+				line-height: 1.5;
+			}
+			.read-more {
+				margin-top: auto;
+				color: rgb(var(--black));
+				font-size: 1rem;
+				font-weight: 700;
+				text-decoration: underline;
+			}
+			ul li a:hover .title,
+			ul li a:hover .read-more {
+				color: rgb(var(--accent));
+			}
+			ul li a:hover .vector {
+				background: rgba(var(--gray-light), 0.7);
+				box-shadow: var(--box-shadow);
+			}
+			@media (max-width: 720px) {
+				ul {
+					grid-template-columns: 1fr;
+					gap: 2rem;
+				}
+			}
+		</style>
+	</head>
+	<body>
+		<Header />
+		<main>
+			<section>
+				<header class="page-header">
+					<h1>Data Projects</h1>
+					<p>
+						Computational models, analytical tools and software built around pharmacy, pharmacology and
+						public health problems.
+					</p>
+				</header>
+				<ul>
+					{
+						projects.map((project) => (
+							<li>
+								<a href={`/projects/${project.id}/`}>
+									<div class="vector">
+										<img
+											src={project.data.vector.src}
+											width={project.data.vector.width}
+											height={project.data.vector.height}
+											alt=""
+										/>
+									</div>
+									<h4 class="title">{project.data.title}</h4>
+									<p class="description">{project.data.description}</p>
+									<span class="read-more">Read more</span>
+								</a>
+							</li>
+						))
+					}
+				</ul>
+			</section>
+		</main>
+		<Footer />
+	</body>
+</html>
