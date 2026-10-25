@@ -274,19 +274,26 @@ main {
   position: sticky;
   color: #ffffff;
   top: 20px;
-	height: 100vh;
+  height: 100vh;
+  z-index: 0;
 }
 
 .data-project-text {
-	height: 100%;
-	display: flex;
-	flex-direction: column;
-	justify-content: center;
+  height: 100%;
+  max-width: 400px;
+  display: flex;
+  flex-direction: column;
+}
+
+.data-project-content img {
+  width: 320px;
+  height: 320px;
+  object-fit: contain;
 }
 
 .data-project-text h3 {
-	font-size: 36px;
-	font-weight: 500;
+  font-size: 36px;
+  font-weight: 500;
 }
 
 .section-bg-text {
@@ -310,6 +317,47 @@ main {
   z-index: 1;
 }
 
+.data-project-live-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  border-radius: 36px;
+  height: 72px;
+  padding-right: 24px;
+  padding-left: 24px;
+  transition: all 0.3s ease;
+}
+
+.project-github-button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: 1px solid white;
+  border-radius: 36px;
+  margin-right: 24px;
+  height: 72px;
+  width: 72px;
+  transition: all 0.3s ease;
+}
+
+.project-github-button:hover {
+	background-color: white;
+	color: black;
+}
+
+.data-project-live-button:hover {
+	background-color: white;
+	color: black;
+}
+
+
+.data-project-buttons {
+  display: flex;
+  flex-direction: row;
+  margin-top: 36px;
+}
+
 .projects-grid-container {
   display: grid;
   grid-template-columns: repeat(2, 400px);
@@ -317,6 +365,25 @@ main {
   justify-content: center;
   position: relative;
   z-index: 1;
+}
+
+.data-project-title-container {
+  display: flex;
+  flex-direction: row;
+}
+
+.project-index {
+  font-size: 5em;
+  font-weight: bold;
+  margin-top: -35px;
+  margin-left: -15px;
+  margin-right: 10px;
+  color: white;
+}
+
+.project-type-title {
+  color: white;
+  opacity: 0.6;
 }
 
 .data-card {
@@ -330,7 +397,13 @@ main {
   position: sticky;
   color: white;
   padding: 30px;
+}
+
+.data-project-content {
   display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: space-around;
 }
 
 .data-card h3 {
@@ -516,19 +589,127 @@ main {
   width: 100%;
   background: #e5e5e5;
   margin: 0 auto;
+  position: relative;
+}
+
+.writing-section.section {
+  height: auto;
+  min-height: 100vh;
+}
+
+.writing-list {
+  position: relative;
+  z-index: 1;
 }
 
 .writing-item {
   display: flex;
   justify-content: space-between;
   align-items: center;
+  gap: 40px;
   padding: 40px 0;
   border-bottom: 2px solid #b1b2b5;
+  text-decoration: none;
+  color: #000000;
+}
+
+.writing-item-main {
+  min-width: 0;
+}
+
+.writing-date {
+  display: inline-block;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 16px;
+  line-height: 1;
+  margin-bottom: 12px;
 }
 
 .writing-item h3 {
   font-family: "Source Sans Pro", "Helvetica Neue", Arial, sans-serif;
   font-size: 36px;
+  font-weight: 400;
+  line-height: 1.2;
+  margin: 0;
+  transition:
+    transform 0.4s cubic-bezier(0.22, 1, 0.36, 1),
+    color 0.3s ease;
+}
+
+.writing-item:hover h3 {
+  transform: translateX(16px);
+}
+
+.writing-cta {
+  display: inline-flex;
+  align-items: center;
+  gap: 10px;
+  flex-shrink: 0;
+  color: rgba(0, 0, 0, 0.6);
+  font-size: 16px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  transition: color 0.3s ease;
+}
+
+.writing-item:hover .writing-cta {
+  color: #000000;
+}
+
+.writing-arrow {
+  display: inline-block;
+  transition: transform 0.4s cubic-bezier(0.22, 1, 0.36, 1);
+}
+
+.writing-item:hover .writing-arrow {
+  transform: translate(4px, -4px);
+}
+
+/* Hero-image cursor for writing links */
+.writing-cursor {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 340px;
+  height: 240px;
+  border-radius: 18px;
+  background-color: #000000;
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  box-shadow: 0 24px 60px rgba(0, 0, 0, 0.3);
+  pointer-events: none;
+  opacity: 0;
+  z-index: 1000;
+  will-change: transform, opacity;
+}
+
+@media (hover: hover) and (pointer: fine) {
+  .writing-item[data-hero] {
+    cursor: none;
+  }
+}
+
+@media (hover: none), (pointer: coarse) {
+  .writing-cursor {
+    display: none;
+  }
+}
+
+@media (max-width: 720px) {
+  .writing-item {
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 16px;
+  }
+
+  .writing-item h3 {
+    font-size: 28px;
+  }
+
+  .writing-item:hover h3 {
+    transform: none;
+  }
 }
 
 /* Contact Section */

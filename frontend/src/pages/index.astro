@@ -3,14 +3,38 @@ import BaseHead from '../components/BaseHead.astro';
 import { getCollection } from 'astro:content';
 import FundekaMockup from '../assets/fundeka_mock.png';
 import ProfileReveal from '../components/Profilereveal.astro';
-import { Image } from 'astro:assets';
+import { getImage, Image } from 'astro:assets';
 import ZimbabweADR from '../assets/zimbabwe_adr.svg';
 import PharmacokineticPAR from '../assets/pharmacokinetic_par.svg'; 
 import Header from '../components/Header.astro'
+import FormattedDate from '../components/FormattedDate.astro';
 import { SITE_DESCRIPTION, SITE_TITLE } from '../consts';
 import '../styles/design.css';
 
 const projects = (await getCollection('projects'));
+
+const latestPosts = (await getCollection('blog'))
+	.sort((a, b) => b.data.pubDate.valueOf() - a.data.pubDate.valueOf())
+	.slice(0, 4);
+
+const writingPosts = await Promise.all(
+	latestPosts.map(async (post) => ({
+		href: `/blog/${post.id}/`,
+		title: post.data.title,
+		pubDate: post.data.pubDate,
+		heroUrl: post.data.heroImage
+			? (
+					await getImage({
+						src: post.data.heroImage,
+						width: 720,
+						height: 480,
+						fit: 'cover',
+						format: 'webp',
+					})
+				).src
+			: null,
+	})),
+);
 ---
 <script>
 import gsap from "gsap";
@@ -49,6 +73,51 @@ gsap.to(hero, {
 
   // Optional: refresh on resize
   window.addEventListener("resize", () => split.revert());
+
+// Blog post hero-image cursor
+if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+  const cursor = document.querySelector(".writing-cursor");
+  const items = document.querySelectorAll(".writing-item[data-hero]");
+
+  if (cursor && items.length) {
+    gsap.set(cursor, { xPercent: -50, yPercent: -50, scale: 0.8, opacity: 0 });
+
+    const moveX = gsap.quickTo(cursor, "x", { duration: 0.55, ease: "power3" });
+    const moveY = gsap.quickTo(cursor, "y", { duration: 0.55, ease: "power3" });
+
+    window.addEventListener("pointermove", (event) => {
+      moveX(event.clientX);
+      moveY(event.clientY);
+    });
+
+    let visible = false;
+
+    items.forEach((item) => {
+      item.addEventListener("pointerenter", () => {
+        cursor.style.backgroundImage = `url("${item.dataset.hero}")`;
+        if (visible) return;
+        visible = true;
+        gsap.to(cursor, {
+          opacity: 1,
+          scale: 1,
+          duration: 0.35,
+          ease: "power3.out",
+        });
+      });
+
+      item.addEventListener("pointerleave", () => {
+        if (!visible) return;
+        visible = false;
+        gsap.to(cursor, {
+          opacity: 0,
+          scale: 0.8,
+          duration: 0.25,
+          ease: "power2.out",
+        });
+      });
+    });
+  }
+}
 
 // the skills section
 document.addEventListener("DOMContentLoaded", () => {
@@ -265,13 +334,44 @@ Science provides the questions. Data helps reveal the answers. Software makes th
 					<section class="data-projects-stack">
 					<h2 class="section-title">Data Projects</h2>
 					{ projects.map((project, index) => (
-					<div style={`top: ${100 + index * 40}px`} class="data-card">
-							<div class="data-project-text">
-								<h3>{project.data.title}</h3>
-								<p>{project.data.description}</p>
-								<a href={`/projects/${project.id}/`}>Read more</a>
+					<div style={`top: ${100 + index * 40}px; background: ${index === 0 ? "transparent" : "black"}`} class="data-card">
+							<div class="data-project-title-container">
+								<h1 class="project-index">0{index + 1}</h1>
+								<div>
+									<h3>{project.data.title}</h3>
+									<h6 class="project-type-title">Machine Learning</h6>
+								</div>
 							</div>
-							<ZimbabweADR  />
+							<div class="data-project-content">
+										<img
+											src={project.data.vector.src}
+											width={project.data.vector.width}
+											height={project.data.vector.height}
+											alt=""
+										/>
+								<div class="data-project-text">
+									<p>{project.data.description}</p>
+									<a style="margin-top: -12px" href={`/projects/${project.id}/`}>Read more</a>
+									<div class="data-project-buttons">
+									
+										<a href={project.data.link}>
+
+											<div class="project-github-button">									
+				<svg viewBox="0 0 16 16" aria-hidden="true" width="32" height="32"
+					><path
+						fill="white"
+						d="M8 0C3.58 0 0 3.58 0 8c0 3.54 2.29 6.53 5.47 7.59.4.07.55-.17.55-.38 0-.19-.01-.82-.01-1.49-2.01.37-2.53-.49-2.69-.94-.09-.23-.48-.94-.82-1.13-.28-.15-.68-.52-.01-.53.63-.01 1.08.58 1.23.82.72 1.21 1.87.87 2.33.66.07-.52.28-.87.51-1.07-1.78-.2-3.64-.89-3.64-3.95 0-.87.31-1.59.82-2.15-.08-.2-.36-1.02.08-2.12 0 0 .67-.21 2.2.82.64-.18 1.32-.27 2-.27.68 0 1.36.09 2 .27 1.53-1.04 2.2-.82 2.2-.82.44 1.1.16 1.92.08 2.12.51.56.82 1.27.82 2.15 0 3.07-1.87 3.75-3.65 3.95.29.25.54.73.54 1.48 0 1.07-.01 1.93-.01 2.2 0 .21.15.46.55.38A8.012 8.012 0 0 0 16 8c0-4.42-3.58-8-8-8z"
+						></path></svg>
+											</div>
+										</a>
+											<a href={project.data.link}>
+											<div class="data-project-live-button">
+												<p>Live Project</p>
+											</div>
+											</a>
+									</div>
+								</div>
+							</div>
 						</div>
 						))}
 					</section>
@@ -280,27 +380,28 @@ Science provides the questions. Data helps reveal the answers. Software makes th
 					<div class="section-bg-text">Writing</div>
 					<h2 class="section-title">Writing</h2>
 					
-					<div class="writing-item">
-						<div>
-							<span style="color: rgba(0,0,0,0.6);">Feb 2026</span>
-							<h3>Why Most Health Tech Fails in Low Resource Settings</h3>
-						</div>
-						<span style="color: rgba(0,0,0,0.6);">DIGITAL HEALTH</span>
+					<div class="writing-list">
+						{writingPosts.map((post) => (
+							<a
+								class="writing-item"
+								href={post.href}
+								data-hero={post.heroUrl ?? undefined}
+							>
+								<div class="writing-item-main">
+									<span class="writing-date">
+										<FormattedDate date={post.pubDate} />
+									</span>
+									<h3>{post.title}</h3>
+								</div>
+								<span class="writing-cta">
+									Read article
+									<span class="writing-arrow" aria-hidden="true">↗</span>
+								</span>
+							</a>
+						))}
 					</div>
-					<div class="writing-item">
-						<div>
-							<span style="color: rgba(0,0,0,0.6);">Feb 2026</span>
-							<h3>Efficient by design: Rust and Healthcare Software in Africa</h3>
-						</div>
-						<span style="color: rgba(0,0,0,0.6);">DIGITAL HEALTH</span>
-					</div>
-					<div class="writing-item">
-						<div>
-							<span style="color: rgba(0,0,0,0.6);">Feb 2026</span>
-							<h3>What Makes Clinical AI Harder Than Other AI Problems</h3>
-						</div>
-						<span style="color: rgba(0,0,0,0.6);">CLINICAL AI</span>
-					</div>
+
+					<div class="writing-cursor" aria-hidden="true"></div>
 				</section>
 
 				<section class="contact-section section">
