@@ -77,45 +77,84 @@ gsap.to(hero, {
 // Blog post hero-image cursor
 if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
   const cursor = document.querySelector(".writing-cursor");
-  const items = document.querySelectorAll(".writing-item[data-hero]");
+  const list = document.querySelector(".writing-list");
+  const items = document.querySelectorAll<HTMLElement>(".writing-item[data-hero]");
 
   if (cursor && items.length) {
-    gsap.set(cursor, { xPercent: -50, yPercent: -50, scale: 0.8, opacity: 0 });
+    gsap.set(cursor, {
+      xPercent: -50,
+      yPercent: -50,
+      scale: 0.8,
+      opacity: 0,
+      backgroundImage: "none",
+    });
 
     const moveX = gsap.quickTo(cursor, "x", { duration: 0.55, ease: "power3" });
     const moveY = gsap.quickTo(cursor, "y", { duration: 0.55, ease: "power3" });
 
-    window.addEventListener("pointermove", (event) => {
-      moveX(event.clientX);
-      moveY(event.clientY);
-    });
+    window.addEventListener(
+      "pointermove",
+      (event) => {
+        moveX(event.clientX);
+        moveY(event.clientY);
+      },
+      { passive: true },
+    );
 
-    let visible = false;
+    let activeItem: HTMLElement | null = null;
+
+    const hidePreview = () => {
+      activeItem = null;
+
+      gsap.to(cursor, {
+        opacity: 0,
+        scale: 0.8,
+        duration: 0.25,
+        ease: "power2.out",
+        onComplete: () => {
+          // Only clear once the preview is fully hidden, so quick moves between
+          // items don't flash the wrong image.
+          if (!activeItem) cursor.style.backgroundImage = "none";
+        },
+      });
+
+      // Bring the site cursor back.
+      window.dispatchEvent(new Event("site-cursor:restore"));
+    };
+
+    const showPreview = (item: HTMLElement) => {
+      activeItem = item;
+      cursor.style.backgroundImage = `url("${item.dataset.hero}")`;
+
+      // The image preview replaces the dot cursor while it is visible.
+      window.dispatchEvent(new Event("site-cursor:suppress"));
+
+      gsap.to(cursor, {
+        opacity: 1,
+        scale: 1,
+        duration: 0.35,
+        ease: "power3.out",
+      });
+    };
 
     items.forEach((item) => {
-      item.addEventListener("pointerenter", () => {
-        cursor.style.backgroundImage = `url("${item.dataset.hero}")`;
-        if (visible) return;
-        visible = true;
-        gsap.to(cursor, {
-          opacity: 1,
-          scale: 1,
-          duration: 0.35,
-          ease: "power3.out",
-        });
-      });
+      item.addEventListener("pointerenter", () => showPreview(item));
 
-      item.addEventListener("pointerleave", () => {
-        if (!visible) return;
-        visible = false;
-        gsap.to(cursor, {
-          opacity: 0,
-          scale: 0.8,
-          duration: 0.25,
-          ease: "power2.out",
-        });
+      item.addEventListener("pointerleave", (event) => {
+        if (activeItem !== item) return;
+
+        // Moving straight onto another writing item: keep the preview visible
+        // and just let the next item swap the image.
+        const next = event.relatedTarget;
+        if (next instanceof Element && next.closest(".writing-item[data-hero]")) return;
+
+        hidePreview();
       });
     });
+
+    // Safety net so the image can never linger after leaving the list.
+    list?.addEventListener("pointerleave", hidePreview);
+    window.addEventListener("blur", hidePreview);
   }
 }
 
@@ -240,13 +279,13 @@ Science provides the questions. Data helps reveal the answers. Software makes th
     <div class="skill-category active">
       <div class="skill-header">
         <h3>Biomedical & Science</h3>
-        <div class="icon">✕</div>
+        <div class="icon">+</div>
       </div>
 
       <div class="skill-content">
         <div class="skill-content-inner">
 					<p>
-					Pharmacology, drug research, biological assays, experimental design, and interpretation of biomedical evidence.
+					Pharmacology and drug research — from biological assays and experimental design to interpreting biomedical evidence.
           </p>
 
           <div class="tags">
@@ -262,19 +301,19 @@ Science provides the questions. Data helps reveal the answers. Software makes th
     <div class="skill-category">
       <div class="skill-header">
         <h3>Data Science & Quantitative Modeling</h3>
-        <div class="icon">↗</div>
+        <div class="icon">+</div>
       </div>
 
       <div class="skill-content">
         <div class="skill-content-inner">
           <p>
-					Data analysis, statistical reasoning, scientific computing, and quantitative approaches to understanding complex systems.
+					Statistical reasoning, scientific computing, and quantitative modelling for making sense of complex biological systems.
           </p>
 
           <div class="tags">
-            <div class="tag">React / Next.js</div>
-            <div class="tag">Django</div>
-            <div class="tag">TypeScript</div>
+            <div class="tag">Pharmacometrics</div>
+            <div class="tag">Statistical Modelling</div>
+            <div class="tag">Python / R</div>
           </div>
         </div>
       </div>
@@ -284,19 +323,20 @@ Science provides the questions. Data helps reveal the answers. Software makes th
     <div class="skill-category">
       <div class="skill-header">
         <h3>Software Engineering</h3>
-        <div class="icon">↗</div>
+        <div class="icon">+</div>
       </div>
 
       <div class="skill-content">
         <div class="skill-content-inner">
           <p>
-					Application development, data pipelines, backend systems, database design, and building practical tools around real-world problems.
+					Application development, data pipelines, backend systems, and database design for building practical, real-world tools.
           </p>
 
           <div class="tags">
-            <div class="tag">Pharmacometrics</div>
-            <div class="tag">Modeling</div>
-            <div class="tag">Data Analysis</div>
+            <div class="tag">React / Next.js</div>
+            <div class="tag">Django</div>
+            <div class="tag">TypeScript</div>
+            <div class="tag">PostgreSQL</div>
           </div>
         </div>
       </div>
@@ -306,19 +346,20 @@ Science provides the questions. Data helps reveal the answers. Software makes th
     <div class="skill-category">
       <div class="skill-header">
         <h3>Human-Centered Design</h3>
-        <div class="icon">↗</div>
+        <div class="icon">+</div>
       </div>
 
       <div class="skill-content">
         <div class="skill-content-inner">
           <p>
-					Turning complex workflows into clear interfaces, accessible information, and software that people can actually use.
+					Turning complex workflows into clear, accessible interfaces — software that people can actually use.
           </p>
 
           <div class="tags">
             <div class="tag">UI/UX</div>
             <div class="tag">Animation</div>
             <div class="tag">Creative Coding</div>
+            <div class="tag">Accessibility</div>
           </div>
         </div>
       </div>
@@ -326,9 +367,6 @@ Science provides the questions. Data helps reveal the answers. Software makes th
 
   </div>
 </section>
-
-<!-- Load script -->
-<script src="/scripts/skillsAccordion.js" defer></script>
 
 					
 					<section class="data-projects-stack">

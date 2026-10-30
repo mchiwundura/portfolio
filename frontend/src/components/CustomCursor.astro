@@ -1,0 +1,174 @@
+---
+// Site-wide custom cursor, based on the circle + dot cursor from the hero.
+---
+
+<div id="site-cursor" class="site-cursor" aria-hidden="true">
+  <div class="site-cursor-motion">
+    <svg class="site-cursor-shape" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="20" cy="20" r="18" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.9" />
+      <circle cx="20" cy="20" r="3" fill="currentColor" opacity="0.9" />
+    </svg>
+  </div>
+</div>
+
+<script>
+  const cursor = document.getElementById('site-cursor') as HTMLElement | null;
+  const canHover = window.matchMedia('(hover: hover) and (pointer: fine)').matches;
+  const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if (cursor && canHover) {
+    const motion = cursor.querySelector('.site-cursor-motion') as HTMLElement;
+    const root = document.documentElement;
+
+    // Only hide the native cursor when the custom one can actually be shown.
+    root.classList.add('has-custom-cursor');
+
+    let targetX = window.innerWidth / 2;
+    let targetY = window.innerHeight / 2;
+    let x = targetX;
+    let y = targetY;
+    let vx = 0;
+    let vy = 0;
+    let visible = false;
+    let hovering = false;
+
+    const interactiveSelector =
+      'a, button, [role="button"], input, textarea, select, summary, label, .skill-category, .writing-item';
+
+    const show = () => {
+      if (!visible) {
+        visible = true;
+        cursor.classList.add('is-visible');
+      }
+    };
+
+    const hide = () => {
+      if (visible) {
+        visible = false;
+        cursor.classList.remove('is-visible');
+      }
+    };
+
+    const updateHover = (target: EventTarget | null) => {
+      const element = target instanceof Element ? target.closest(interactiveSelector) : null;
+      const next = Boolean(element);
+      if (next !== hovering) {
+        hovering = next;
+        cursor.classList.toggle('is-hovering', hovering);
+      }
+    };
+
+    window.addEventListener(
+      'pointermove',
+      (event) => {
+        targetX = event.clientX;
+        targetY = event.clientY;
+        show();
+        updateHover(event.target);
+      },
+      { passive: true },
+    );
+
+    document.addEventListener('pointerleave', hide);
+    document.addEventListener('pointerenter', show);
+    window.addEventListener('blur', hide);
+
+    document.addEventListener('visibilitychange', () => {
+      if (document.hidden) hide();
+    });
+
+    // Allows sections with their own cursor treatment (e.g. the writing image
+    // preview) to temporarily take over the pointer.
+    window.addEventListener('site-cursor:suppress', () => cursor.classList.add('is-suppressed'));
+    window.addEventListener('site-cursor:restore', () => cursor.classList.remove('is-suppressed'));
+
+    const render = () => {
+      if (reduceMotion) {
+        x = targetX;
+        y = targetY;
+        cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+        motion.style.transform = 'rotate(0deg) scale(1, 1)';
+        requestAnimationFrame(render);
+        return;
+      }
+
+      const spring = 0.22;
+      const damping = 0.7;
+
+      vx = (vx + (targetX - x) * spring) * damping;
+      vy = (vy + (targetY - y) * spring) * damping;
+      x += vx;
+      y += vy;
+
+      // Squash and stretch in the direction of travel, like the hero cursor.
+      const speed = Math.hypot(vx, vy);
+      const stretch = 1 + Math.min(speed * 0.012, 0.35);
+      const angle = speed > 0.01 ? (Math.atan2(vy, vx) * 180) / Math.PI : 0;
+
+      cursor.style.transform = `translate3d(${x}px, ${y}px, 0)`;
+      motion.style.transform = `rotate(${angle}deg) scale(${stretch}, ${1 / Math.sqrt(stretch)})`;
+
+      requestAnimationFrame(render);
+    };
+
+    requestAnimationFrame(render);
+  }
+</script>
+
+<style>
+  :global(html.has-custom-cursor),
+  :global(html.has-custom-cursor *) {
+    cursor: none !important;
+  }
+
+  .site-cursor {
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    width: 0;
+    height: 0;
+    color: #ffffff;
+    pointer-events: none;
+    mix-blend-mode: difference;
+    opacity: 0;
+    transition: opacity 0.2s ease;
+    will-change: transform;
+  }
+
+  .site-cursor.is-visible {
+    opacity: 1;
+  }
+
+  .site-cursor.is-suppressed {
+    opacity: 0 !important;
+  }
+
+  .site-cursor-motion {
+    width: 40px;
+    height: 40px;
+    margin-top: -20px;
+    margin-left: -20px;
+    transform-origin: 50% 50%;
+    will-change: transform;
+  }
+
+  .site-cursor-shape {
+    display: block;
+    width: 100%;
+    height: 100%;
+    overflow: visible;
+    transform: scale(1);
+    transition: transform 0.25s cubic-bezier(0.22, 1, 0.36, 1);
+  }
+
+  .site-cursor.is-hovering .site-cursor-shape {
+    transform: scale(1.55);
+  }
+
+  @media (hover: none), (pointer: coarse) {
+    .site-cursor {
+      display: none;
+    }
+  }
+</style>

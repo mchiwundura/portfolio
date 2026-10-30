@@ -13,12 +13,6 @@ const labcoatUrl = ProfileLabcoat.src;
   data-labcoat={labcoatUrl}
 >
   <canvas id="profile-reveal-canvas"></canvas>
-
-  <!-- Custom SVG cursor: circle with dot -->
-  <svg id="blob-cursor" viewBox="0 0 40 40" xmlns="http://www.w3.org/2000/svg">
-    <circle cx="20" cy="20" r="18" fill="none" stroke="white" stroke-width="1.5" opacity="0.9"/>
-    <circle cx="20" cy="20" r="3"  fill="white" opacity="0.9"/>
-  </svg>
 </div>
 
 <script>
@@ -26,7 +20,6 @@ const labcoatUrl = ProfileLabcoat.src;
 
   const wrapper = document.getElementById('profile-canvas-wrapper') as HTMLElement;
   const canvas  = document.getElementById('profile-reveal-canvas') as HTMLCanvasElement;
-  const cursor  = document.getElementById('blob-cursor') as unknown as SVGElement;
 
   const sterileUrl = wrapper.dataset.sterile!;
   const labcoatUrl = wrapper.dataset.labcoat!;
@@ -183,14 +176,7 @@ const labcoatUrl = ProfileLabcoat.src;
     }
 
     window.addEventListener('mousemove', (e: MouseEvent) => {
-      const uv = toUV(e);
-      mouseUV  = uv;
-      // Update cursor SVG position
-      const rect = canvas.getBoundingClientRect();
-      const cx   = e.clientX - rect.left;
-      const cy   = e.clientY - rect.top;
-      (cursor as any).style.left = (cx - 20) + 'px';
-      (cursor as any).style.top  = (cy - 20) + 'px';
+      mouseUV = toUV(e);
     });
 
     canvas.addEventListener('mouseenter', () => { isOver = true;  });
@@ -255,12 +241,6 @@ const labcoatUrl = ProfileLabcoat.src;
       }
       material.uniforms.uBlobs.value = blobData;
 
-      // Scale cursor SVG with primary blob velocity (squish effect)
-      const speed  = Math.sqrt(pb.vx * pb.vx + pb.vy * pb.vy);
-      const scale  = 1 + speed * 8;
-      const angle  = Math.atan2(pb.vy, pb.vx) * (180 / Math.PI);
-      (cursor as any).style.transform = `rotate(${angle}deg) scaleX(${scale}) scaleY(${1 / Math.sqrt(scale)})`;
-
       renderer.render(scene, camera);
     }
 
@@ -279,19 +259,5 @@ const labcoatUrl = ProfileLabcoat.src;
 
   #profile-reveal-canvas {
     display: block;
-    cursor: none;
-  }
-
-  #blob-cursor {
-    position: absolute;
-    width: 40px;
-    height: 40px;
-    pointer-events: none;
-    transform-origin: center center;
-    top: -100px;
-    left: -100px;
-    mix-blend-mode: difference;
-    transition: opacity 0.2s;
-    z-index: 10;
   }
 </style>

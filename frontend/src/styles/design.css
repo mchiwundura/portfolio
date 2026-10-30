@@ -502,6 +502,9 @@ main {
   display: flex;
   align-items: center;
   justify-content: center;
+  font-size: 36px;
+  font-weight: 300;
+  line-height: 1;
   transition: all 0.3s ease;
 }
 
@@ -682,12 +685,6 @@ main {
   opacity: 0;
   z-index: 1000;
   will-change: transform, opacity;
-}
-
-@media (hover: hover) and (pointer: fine) {
-  .writing-item[data-hero] {
-    cursor: none;
-  }
 }
 
 @media (hover: none), (pointer: coarse) {
