@@ -220,13 +220,15 @@ main {
 /* About Me Section */
 .about-section {
   position: relative;
+  box-sizing: border-box;
   width: 100%;
   max-width: 1280px;
+  height: auto;
   background: #000000;
   color: #ffffff;
   overflow: hidden;
   margin: 0 auto;
-  padding: 0 auto;
+  padding: 90px clamp(24px, 6vw, 96px);
 }
 
 .about-title {
@@ -254,7 +256,7 @@ main {
     Helvetica,
     Arial,
     sans-serif;
-  font-size: 48px;
+  font-size: clamp(28px, 2.7vw, 42px);
   text-transform: uppercase;
   line-height: 1.2;
 }
@@ -262,10 +264,12 @@ main {
 /* Data Projects Section */
 .data-projects-stack {
   position: relative;
+  box-sizing: border-box;
   width: 100%;
   display: flex;
   justify-content: center;
   flex-direction: column;
+  padding: 80px clamp(24px, 6vw, 96px) 0;
 }
 
 .data-projects-stack h2 {
@@ -452,8 +456,10 @@ main {
 }
 
 .skills-section {
+  box-sizing: border-box;
   width: 100%;
   background: #e5e5e5;
+  padding: 100px clamp(24px, 6vw, 96px);
 }
 
 .section-title {
@@ -462,17 +468,28 @@ main {
   margin-bottom: 40px;
 }
 
+.skills-section > .section-title {
+  box-sizing: border-box;
+  max-width: 1280px;
+  padding: 0 32px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
 .skills-container {
   border-radius: 24px;
+  max-width: 1280px;
+  margin: 0 auto;
 }
 
 /* CATEGORY */
 .skill-category {
   border-top: 1px solid rgba(0, 0, 0, 0.2);
-  padding: 30px 0;
-  width: 90%;
+  padding: 30px 32px;
+  width: 100%;
+  box-sizing: border-box;
   cursor: pointer;
-  transition: all 0.3s ease;
+  transition: background-color 0.3s ease, color 0.3s ease;
 }
 
 /* HEADER */
@@ -488,7 +505,7 @@ main {
   margin: 0;
   color: transparent;
   -webkit-text-stroke: 1px black;
-  transition: all 0.3s ease;
+  transition: color 0.5s ease;
 }
 
 /* ICON */
@@ -510,10 +527,11 @@ main {
 .skill-content {
   overflow: hidden;
   height: 0;
+  color: #000000;
 }
 
 .skill-content-inner {
-  padding-top: 20px;
+  padding-top: 0;
 }
 
 .skill-content p {
@@ -536,21 +554,9 @@ main {
 }
 
 /* ACTIVE STATE */
-.skill-category.active {
-  background: black;
-  color: white;
-  border-radius: 24px;
-  padding: 40px;
-}
-
 .skill-category.active .skill-header h3 {
-  color: white;
-  -webkit-text-stroke: 0;
-}
-
-.skill-category.active .icon {
-  border-color: white;
-  color: white;
+  color: #000000;
+  -webkit-text-stroke: 1px black;
 }
 
 /* Fundeka Section */
@@ -587,15 +593,24 @@ main {
 
 /* Writing Section */
 .writing-section {
+  box-sizing: border-box;
   width: 100%;
   background: #e5e5e5;
   margin: 0 auto;
   position: relative;
+  padding: 100px clamp(24px, 6vw, 96px);
 }
 
 .writing-section.section {
   height: auto;
   min-height: 100vh;
+}
+
+.writing-section > .section-title,
+.writing-list {
+  max-width: 1280px;
+  margin-left: auto;
+  margin-right: auto;
 }
 
 .writing-list {
@@ -704,6 +719,24 @@ main {
 
   .writing-item:hover h3 {
     transform: none;
+  }
+
+  .skills-section > .section-title {
+    padding: 0;
+  }
+
+  .skill-category {
+    padding: 24px 20px;
+  }
+
+  .skill-header h3 {
+    font-size: 36px;
+  }
+
+  .icon {
+    width: 48px;
+    height: 48px;
+    font-size: 28px;
   }
 }
 
