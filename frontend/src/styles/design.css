@@ -25,12 +25,19 @@ main {
   margin: 0 auto;
   transform-origin: center center;
   transition: transform 0.1s linear;
+	display: flex;
+	flex-direction: row;
+}
+
+.hero-text {
+	position: relative;
+	display: flex;
+	flex-direction: column;
+	justify-content: center;
+	padding-left: 10%;
 }
 
 .hero-hello {
-  position: absolute;
-  left: 116px;
-  top: 275px;
   font-family:
     "SF Pro Display",
     -apple-system,
@@ -48,9 +55,6 @@ main {
 }
 
 .hero-tagline {
-  position: absolute;
-  left: 114px;
-  top: 491px;
   font-family:
     "SF Pro Display",
     -apple-system,
@@ -63,6 +67,8 @@ main {
   font-size: 18px;
   font-weight: 400;
   text-transform: capitalize;
+	margin-top: 20px;
+	margin-bottom: 20px;
   color: #000000;
 }
 
@@ -70,7 +76,6 @@ main {
   position: absolute;
   left: -75.5px;
   top: 262.5px;
-  width: 260px;
   font-family:
     "SF Pro Display",
     -apple-system,
@@ -141,9 +146,6 @@ main {
 }
 
 .hero-resume-btn {
-  position: absolute;
-  left: 116px;
-  top: 543px;
   width: 254px;
   height: 56px;
   background: #000000;
@@ -166,11 +168,7 @@ main {
 }
 
 .hero-profile-images {
-  position: absolute;
-  left: 394px;
-  bottom: -30px;
-  width: 886px;
-  height: 888px;
+	height: 100%;
 }
 
 .profile-img {
