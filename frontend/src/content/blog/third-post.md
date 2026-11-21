@@ -1,5 +1,5 @@
 ---
-title: 'We Keep Building the Wrong Thing — A Better Vision for Health Tech in Africa'
+title: 'We Keep Building the Wrong Thing: A Better Vision for Health Tech in Africa'
 description: 'Health technology carries enormous promise, but promise alone does not transform healthcare. This article maps the economic, social, infrastructural, and political barriers that cause health tech initiatives to fail in low-resource settings, explores the genuine opportunities that well-designed digital tools can unlock, and closes with practical principles for building solutions that actually work.'
 pubDate: 'Jul 22 2026'
 heroImage: '../../assets/health-tech-failure-africa.png'
